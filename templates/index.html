@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flight Delay Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 40px;
+        }
+
+        .container {
+            width: 500px;
+            margin: auto;
+            background: #fff;
+            padding: 30px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-top: 12px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            margin-top: 20px;
+            width: 100%;
+            padding: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            text-align: center;
+            color: green;
+            font-weight: bold;
+        }
+
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Flight Delay Prediction</h1>
+        <form method="POST">
+            {% for field in ['Year', 'Quarter', 'Month', 'DayofMonth', 'DayOfWeek', 'CRSDepTime', 'Cancelled', 'Diverted', 'Distance', 'DistanceGroup', 'ArrDelay', 'ArrDelayMinutes', 'AirTime'] %}
+                <label>{{ field }}:</label>
+                <input type="number" name="{{ field }}" step="any" required>
+            {% endfor %}
+
+            <label>Reporting Airline:</label>
+            <select name="Reporting_Airline" required>
+                {% for key in airline_keys %}
+                    <option value="{{ key }}">{{ key }}</option>
+                {% endfor %}
+            </select>
+
+            <label>Origin:</label>
+            <select name="Origin" required>
+                {% for key in origin_keys %}
+                    <option value="{{ key }}">{{ key }}</option>
+                {% endfor %}
+            </select>
+
+            <label>Destination:</label>
+            <select name="Dest" required>
+                {% for key in dest_keys %}
+                    <option value="{{ key }}">{{ key }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="submit">Predict</button>
+        </form>
+
+        {% if result %}
+            <div class="result {% if 'Error' in result %}error{% endif %}">
+                {{ result }}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
